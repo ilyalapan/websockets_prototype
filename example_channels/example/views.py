@@ -4,6 +4,8 @@ from example.models import Requests
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from channels.asgi import get_channel_layer
+
 
 
 import json
@@ -19,6 +21,10 @@ def open_box(request):
     if not box_number:
         return JsonResponse({'error' : 'Box number not set'})
     r = Requests()
+    channel_layer = get_channel_layer()
+    ch_group_list = channel_layer.group_channels('users')
+    print('List of connected users: ',ch_group_list)
+    r.status = True if len(ch_group_list) else False
     r.save()
     Group('users').send({
         'text': json.dumps({'request' : dict(r), 
