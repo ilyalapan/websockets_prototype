@@ -115,3 +115,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+
+redis-stable.tar.gz
+redis-stable/
